@@ -30,31 +30,56 @@ int totalReadings(const Node* head) {
     return total;
 }
 
+// does the same thing as we've been doing but more automated since it's a function
+Node* addReading(Node* head, int value) {
+    Node* node = new Node;
+    node->value = value;
+    node->next = head;
+    // head = node;        // changes only this function's copy of head
+    return node; // return memory address of the new start of the list
+}
+
+void deleteReadings(Node* head) {
+    while (head != nullptr) {
+        Node* following = head->next;   // save the next address first
+        delete head;
+        head = following;
+    }
+}
 
 int main() {
     // Node firstItemInList(5, nullptr); // create with nullptr since it's the first Node
     // int array[1] = {5}; // equivalent to this
     
-    Node* fourth = new Node; // create on heap; the tail
-    fourth->value = 8; // equivalent to *(third).value = 2;
-    fourth->next = nullptr; // nothing after
+    Node* head = addReading(nullptr, 8);
+    head = addReading(head, 2);
+    head = addReading(head, 9);
+    head = addReading(head, 5);
+    head = addReading(head, 0);
 
-    // {2}
-    Node* third = new Node; // create on heap; the tail
-    third->value = 2; // equivalent to *(third).value = 2;
-    third->next = fourth; // nothing after
+    // Node* fourth = new Node; // create on heap; the tail
+    // fourth->value = 8; // equivalent to *(third).value = 2;
+    // fourth->next = nullptr; // nothing after
 
-    // {9, 2}
-    Node* second = new Node;
-    second->value = 9;
-    second->next = third;
+    // // {2}
+    // Node* third = new Node; // create on heap; the tail
+    // third->value = 2; // equivalent to *(third).value = 2;
+    // third->next = fourth; // nothing after
 
-    // {5, 9, 2}
-    Node* first = new Node; // the head
-    first->value = 5;
-    first->next = second;
+    // // {9, 2}
+    // Node* second = new Node;
+    // second->value = 9;
+    // second->next = third;
 
-    Node* head = first;
+    // // {5, 9, 2}
+    // Node* first = new Node; // the head
+    // first->value = 5;
+    // first->next = second;
+
+    // Node* head = first;
+
+    // addReadingBroken(head, 0); // main's copy of head will be exactly the same value, not updated by function
+    // head = addReading(head, 0);
 
     cout << "The total value held in the linked list is " << totalReadings(head) << endl;
     printReadings(head);
@@ -63,14 +88,15 @@ int main() {
     // cout << head->next->value << endl;
     // cout << head->next->next->value << endl;
 
-    delete first;
-    delete second;
-    delete third;
-    
+    // delete first;
+    // delete second;
+    // delete third;
+    // delete head; // only the first node is deleted; it's a problem because you've allocated memory 5 times but only delete one; we need to deallocate everything -> deleteReading
+    deleteReadings(head); // uses the head as a starting point
     head = nullptr;
-    first = nullptr;
-    second = nullptr;
-    third = nullptr;
+    // first = nullptr;
+    // second = nullptr;
+    // third = nullptr;
 
     return 0;
 }
